@@ -23,8 +23,8 @@ colors = [Red, Green, Blue, Yellow, Orange, Purple]
 
 -- Get the number of exact matches between the actual code and the guess
 exactMatches :: Code -> Code -> Int
-exactMatches [_] [] = lengthOfCodesIsNotEqual
-exactMatches [] [_] = lengthOfCodesIsNotEqual
+exactMatches (_:_) [] = lengthOfCodesIsNotEqual
+exactMatches [] (_:_) = lengthOfCodesIsNotEqual
 exactMatches [] [] = 0
 exactMatches (actualHead:actualRest) (guessHead:guessRest) = if actualHead == guessHead
 															 then 1 + exactMatches actualRest guessRest
@@ -36,17 +36,21 @@ lengthOfCodesIsNotEqual = error "length of actual and guess codes is not equal"
 
 -- For each peg in xs, count how many times is occurs in ys
 countColors :: Code -> [Int]
-countColors = undefined
+countColors code = map countColor colors
+				   where countColor color = length $ filter (== color) code
 
 -- Count number of matches between the actual code and the guess
 matches :: Code -> Code -> Int
-matches = undefined
+matches actual guess = sum $ map (uncurry min) $ zip (countColors actual) (countColors guess)
 
 -- Exercise 3 -----------------------------------------
 
 -- Construct a Move from a guess given the actual code
 getMove :: Code -> Code -> Move
-getMove = undefined
+getMove actual guess = Move guess numExactMatches numNonExactMatches
+						where 
+							numExactMatches = exactMatches actual guess
+							numNonExactMatches = (matches actual guess) - numExactMatches
 
 -- Exercise 4 -----------------------------------------
 
