@@ -27,8 +27,8 @@ exactMatches (_:_) [] = lengthOfCodesIsNotEqual
 exactMatches [] (_:_) = lengthOfCodesIsNotEqual
 exactMatches [] [] = 0
 exactMatches (actualHead:actualRest) (guessHead:guessRest) = if actualHead == guessHead
-															 then 1 + exactMatches actualRest guessRest
-															 else exactMatches actualRest guessRest
+                                                             then 1 + exactMatches actualRest guessRest
+                                                             else exactMatches actualRest guessRest
 
 lengthOfCodesIsNotEqual = error "length of actual and guess codes is not equal"
 
@@ -37,7 +37,7 @@ lengthOfCodesIsNotEqual = error "length of actual and guess codes is not equal"
 -- For each peg in xs, count how many times is occurs in ys
 countColors :: Code -> [Int]
 countColors code = map countColor colors
-				   where countColor color = length $ filter (== color) code
+                   where countColor color = length $ filter (== color) code
 
 -- Count number of matches between the actual code and the guess
 matches :: Code -> Code -> Int
@@ -48,16 +48,16 @@ matches actual guess = sum $ map (uncurry min) $ zip (countColors actual) (count
 -- Construct a Move from a guess given the actual code
 getMove :: Code -> Code -> Move
 getMove actual guess = Move guess numExactMatches numNonExactMatches
-						where 
-							numExactMatches = exactMatches actual guess
-							numNonExactMatches = (matches actual guess) - numExactMatches
+                        where 
+                            numExactMatches = exactMatches actual guess
+                            numNonExactMatches = (matches actual guess) - numExactMatches
 
 -- Exercise 4 -----------------------------------------
 
 isConsistent :: Move -> Code -> Bool
 isConsistent (Move guess numExactMatches numNonExactMatches) providedCode =
-						let Move _ providedCodeExactMatches providedCodeNonExactMatches = getMove guess providedCode
-						in numExactMatches == providedCodeExactMatches && numNonExactMatches == providedCodeNonExactMatches
+                        let Move _ providedCodeExactMatches providedCodeNonExactMatches = getMove guess providedCode
+                        in numExactMatches == providedCodeExactMatches && numNonExactMatches == providedCodeNonExactMatches
 
 -- Exercise 5 -----------------------------------------
 
@@ -73,7 +73,21 @@ allCodes n = [ color : shorterCode | color <- colors, shorterCode <- allCodes (n
 -- Exercise 7 -----------------------------------------
 
 solve :: Code -> [Move]
-solve = undefined
+solve [] = []
+solve secretCode = solve' secretCode initialMove possibilities
+                where
+                    initialMove = getMove secretCode guess
+                    guess = head possibilities
+                    possibilities = allCodes $ length secretCode 
+
+solve' :: Code -> Move -> [Code] -> [Move]
+solve' _ _ [] = error "Impossible!"
+solve' _ _ [_] = []
+solve' secretCode move possibilities = 
+    let 
+        newPossibilities = filterCodes move possibilities
+        guess = head newPossibilities
+    in move : solve' secretCode (getMove secretCode guess) newPossibilities
 
 -- Bonus ----------------------------------------------
 
