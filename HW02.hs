@@ -55,17 +55,20 @@ getMove actual guess = Move guess numExactMatches numNonExactMatches
 -- Exercise 4 -----------------------------------------
 
 isConsistent :: Move -> Code -> Bool
-isConsistent = undefined
+isConsistent (Move guess numExactMatches numNonExactMatches) providedCode =
+						let Move _ providedCodeExactMatches providedCodeNonExactMatches = getMove guess providedCode
+						in numExactMatches == providedCodeExactMatches && numNonExactMatches == providedCodeNonExactMatches
 
 -- Exercise 5 -----------------------------------------
 
 filterCodes :: Move -> [Code] -> [Code]
-filterCodes = undefined
+filterCodes move = filter $ isConsistent move
 
 -- Exercise 6 -----------------------------------------
 
 allCodes :: Int -> [Code]
-allCodes = undefined
+allCodes 0 = [[]]
+allCodes n = [ color : shorterCode | color <- colors, shorterCode <- allCodes (n - 1) ]
 
 -- Exercise 7 -----------------------------------------
 
