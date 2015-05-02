@@ -34,7 +34,7 @@ type State = String -> Int
 -- Exercise 1 -----------------------------------------
 
 extend :: State -> String -> Int -> State
-extend currentState varName varValue = (\lookupVarName -> if lookupVarName == varName then varValue else currentState varName) 
+extend currentState varName varValue = (\lookupVarName -> if lookupVarName == varName then varValue else currentState lookupVarName) 
 
 empty :: State
 empty = (\_ -> 0)
@@ -85,8 +85,8 @@ desugar Skip = DSkip
 evalSimple :: State -> DietStatement -> State
 evalSimple currentState (DAssign varName expression) = extend currentState varName $ evalE currentState expression
 evalSimple currentState (DIf condition trueStatement falseStatement) = if intToBool $ evalE currentState condition
-                                                                       then evalSimple currentState falseStatement
-                                                                       else evalSimple currentState trueStatement
+                                                                       then evalSimple currentState trueStatement
+                                                                       else evalSimple currentState falseStatement
 evalSimple currentState (DWhile condition statement) = evalWhile currentState condition statement
 evalSimple currentState (DSequence statement1 statement2) = let newState = evalSimple currentState statement1
                                                             in evalSimple newState statement2
@@ -94,10 +94,9 @@ evalSimple currentState DSkip = currentState
 
 evalWhile :: State -> Expression -> DietStatement -> State
 evalWhile currentState condition statement = if intToBool $ evalE currentState condition
-                                            then currentState
-                                            else 
-                                                  let newState = evalSimple currentState statement
+                                             then let newState = evalSimple currentState statement
                                                   in evalWhile newState condition statement
+                                             else currentState
 
 intToBool :: Int -> Bool
 intToBool 0 = False
