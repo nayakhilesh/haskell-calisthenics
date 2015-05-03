@@ -73,6 +73,23 @@ ex5Tests = [ testF2 "times test" times
              ]
            ]
 
+-- Exercise 6 -----------------------------------------
+
+ex6Tests :: [Test]
+ex6Tests = [ testF1 "negate test" negate
+             [ (P [], P [])
+             , (P [1], P[-1])
+             , (P [-1], P[1])
+             , (P [1, -2], P[-1, 2])
+             , (P [-1, 2], P[1, -2])
+             ]
+           ,
+             testF1 "fromInteger test" fromInteger
+             [ (4, P [4])
+             , (5, P [5.0])
+             ]
+           ]
+
 -- All Tests ------------------------------------------
 
 {-allTests :: [Test]

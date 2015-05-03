@@ -88,8 +88,8 @@ zeros num
 instance Num a => Num (Poly a) where
     (+) = plus
     (*) = times
-    negate      = undefined
-    fromInteger = undefined
+    negate (P as) = P (map (\a -> -a) as)
+    fromInteger integer = P [fromInteger integer]
     -- No meaningful definitions exist
     abs    = undefined
     signum = undefined
