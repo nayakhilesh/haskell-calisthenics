@@ -50,7 +50,11 @@ expoToVarString expo
 -- Exercise 4 -----------------------------------------
 
 plus :: Num a => Poly a -> Poly a -> Poly a
-plus = undefined
+plus (P as) (P bs) = P (plus' as bs)
+
+plus' [] bs = bs
+plus' as [] = as
+plus' (a:as) (b:bs) = (a + b) : plus' as bs
 
 -- Exercise 5 -----------------------------------------
 
