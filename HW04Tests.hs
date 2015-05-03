@@ -90,6 +90,17 @@ ex6Tests = [ testF1 "negate test" negate
              ]
            ]
 
+-- Exercise 7 -----------------------------------------
+
+ex7Tests :: [Test]
+ex7Tests = [ testF2 "applyP test" applyP
+             [ (P [], 1, 0)
+             , (P [], 2, 0)
+             , (P [4, 2, 3], 2, 20)
+             , (P [4, -2, 3], 3, 25)
+             ]
+           ]
+
 -- All Tests ------------------------------------------
 
 {-allTests :: [Test]

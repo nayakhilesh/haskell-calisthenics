@@ -97,7 +97,7 @@ instance Num a => Num (Poly a) where
 -- Exercise 7 -----------------------------------------
 
 applyP :: Num a => Poly a -> a -> a
-applyP = undefined
+applyP (P as) value = foldr (\(a, index) acc -> acc + (a * (value ^ index))) 0 $ zip as [0,1..]
 
 -- Exercise 8 -----------------------------------------
 
