@@ -11,7 +11,13 @@ x = P [0, 1]
 -- Exercise 2 ----------------------------------------
 
 instance (Num a, Eq a) => Eq (Poly a) where
-    (==) (P as) (P bs) = length as == length bs && foldr (\(a, b) acc -> acc && a == b) True (zip as bs) 
+    (==) (P as) (P bs) = length normalizedAs == length normalizedBs 
+                          && foldr (\(a, b) acc -> acc && a == b) True (zip normalizedAs normalizedBs)
+                          where normalizedAs = normalize as
+                                normalizedBs = normalize bs
+
+normalize :: (Num a, Eq a) => [a] -> [a]
+normalize = reverse . dropWhile (== 0) . reverse 
  
 -- Exercise 3 -----------------------------------------
 
