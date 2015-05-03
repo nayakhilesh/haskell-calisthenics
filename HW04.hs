@@ -59,7 +59,23 @@ plus' (a:as) (b:bs) = (a + b) : plus' as bs
 -- Exercise 5 -----------------------------------------
 
 times :: Num a => Poly a -> Poly a -> Poly a
-times = undefined
+times (P []) _ = P [0]
+times _ (P []) = P [0]
+times (P as) (P bs) = foldr (+) (P [0]) (times' as bs)
+
+times' as bs = map (\(a, index) -> 
+                          P (map (\b -> a * b) 
+                                  (zeros index ++ bs)
+                             )
+                    )
+                    asWithIndex
+                where 
+                  asWithIndex = zip as [0,1..]
+
+zeros :: Num a => Int -> [a]
+zeros num
+        | num <= 0 = []
+        | otherwise = 0 : zeros (num - 1)
 
 -- Exercise 6 -----------------------------------------
 
