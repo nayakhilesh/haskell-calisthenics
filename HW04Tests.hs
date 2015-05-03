@@ -96,16 +96,45 @@ ex7Tests :: [Test]
 ex7Tests = [ testF2 "applyP test" applyP
              [ (P [], 1, 0)
              , (P [], 2, 0)
-             , (P [4, 2, 3], 2, 20)
-             , (P [4, -2, 3], 3, 25)
+             , (3*x^2 + 2*x + 4, 2, 20)
+             , (3*x^2 - 2*x + 4, 3, 25)
+             ]
+           ]
+
+-- Exercise 8 -----------------------------------------
+
+ex8Tests :: [Test]
+ex8Tests = [ testF2 "nderiv test" nderiv
+             [ (0, x, x)
+             , (1, x, 1)
+             , (1, 2*x + 1, 2)
+             , (2, 2*x + 1, 0)
+             , (1, 3*x^2 + 2*x + 4, 6*x + 2)
+             , (2, 3*x^2 + 2*x + 4, 6)
+             ]
+           ]
+
+-- Exercise 9 -----------------------------------------
+
+ex9Tests :: [Test]
+ex9Tests = [ testF1 "deriv test" deriv
+             [ (P [], 0)
+             , (P [0], 0)
+             , (2*x + 1, 2)
+             , (3*x^2 + 2*x + 4, 6*x + 2)
+             , (7*x^2 - 5*x + 6, 14*x - 5)
              ]
            ]
 
 -- All Tests ------------------------------------------
 
-{-allTests :: [Test]
-allTests = concat [ ex1Tests
-                  , ex2Tests
+allTests :: [Test]
+allTests = concat [ ex2Tests
                   , ex3Tests
                   , ex4Tests
-                  ]-}
+                  , ex5Tests
+                  , ex6Tests
+                  , ex7Tests
+                  , ex8Tests
+                  , ex9Tests
+                  ]
