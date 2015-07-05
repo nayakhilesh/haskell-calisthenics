@@ -14,6 +14,7 @@ import Data.Bits (xor)
 import Data.Functor
 import Data.List
 import Data.Ord
+import Data.Function (on)
 
 -- Exercise 1 -----------------------------------------
 
@@ -74,12 +75,37 @@ getCriminal = fst . maximumBy (comparing snd) . Map.toList
 -- Exercise 7 -----------------------------------------
 
 undoTs :: Map String Integer -> [TId] -> [Transaction]
-undoTs = undefined
+undoTs mp transactionIds = let descendingPayers = sortByValuesDescending payers
+                               ascendingPayees = sortByValuesAscending payees
+                           in
+                                reconcileDifference descendingPayers ascendingPayees transactionIds
+                           where
+                                (payers, payees) = Map.partition (> 0) mp
+                                  
+reconcileDifference :: [(String, Integer)] -> [(String, Integer)] -> [TId] -> [Transaction]
+reconcileDifference _ _ [] = error "Not enough transaction ids"
+reconcileDifference [] _ _ = []
+reconcileDifference _ [] _ = []
+reconcileDifference ((payer, amountToBePaid):restPayers) ((payee, amountToBeReceived):restPayees) (transactionId:remainingTransactionIds) = 
+                                        Transaction { from = payer, to = payee, amount = transferAmount, tid = transactionId } :
+                                        reconcileDifference newPayers newPayees remainingTransactionIds
+                                        where transferAmount = min amountToBePaid (-amountToBeReceived)
+                                              newPayerAmount = amountToBePaid - transferAmount
+                                              newPayeeAmount = amountToBeReceived + transferAmount
+                                              newPayers = (if newPayerAmount == 0 then restPayers else ((payer, newPayerAmount):restPayers))
+                                              newPayees = (if newPayeeAmount == 0 then restPayees else ((payee, newPayeeAmount):restPayees))
+
+sortByValuesDescending :: Map String Integer -> [(String, Integer)]
+sortByValuesDescending = sortByDescending (compare `on` snd) . Map.toList
+sortByDescending cmp = sortBy (flip cmp) 
+
+sortByValuesAscending :: Map String Integer -> [(String, Integer)]
+sortByValuesAscending = sortBy (compare `on` snd) . Map.toList
 
 -- Exercise 8 -----------------------------------------
 
 writeJSON :: ToJSON a => FilePath -> a -> IO ()
-writeJSON = undefined
+writeJSON filePathToWrite = BS.writeFile filePathToWrite <$> Parser.encode
 
 -- Exercise 9 -----------------------------------------
 
