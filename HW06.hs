@@ -64,7 +64,7 @@ ruler = foldr1 sInterleave (map sRepeat [0..])
 -- | Implementation of C rand
 rand :: Int -> Stream Int
 rand seed = Cons random (rand random)
-			where random = (1103515245 * seed + 12345) `mod` 2147483648
+            where random = (1103515245 * seed + 12345) `mod` 2147483648
 
 -- Exercise 8 -----------------------------------------
 
@@ -79,9 +79,9 @@ minMaxSlow xs = Just (minimum xs, maximum xs)
 minMax :: [Int] -> Maybe (Int, Int)
 minMax [] = Nothing
 minMax (first:rest) = 
-	case (minMax rest) of 
-					Nothing -> Just (first, first)
-					Just (restMin, restMax) -> Just (min first restMin, max first restMax)
+    case (minMax rest) of 
+                    Nothing -> Just (first, first)
+                    Just (restMin, restMax) -> Just (min first restMin, max first restMax)
 
 {- Total Memory in use: 203 MB -}
 minMaxFast :: [Int] -> Maybe (Int, Int)
@@ -91,9 +91,9 @@ minMaxFast xs = minMaxFastHelper minBound maxBound xs
 minMaxFastHelper :: Int -> Int -> [Int] -> Maybe (Int, Int)
 minMaxFastHelper prevMin prevMax [] = Just (prevMin, prevMax)
 minMaxFastHelper prevMin prevMax (first:rest) = minMaxFastHelper newMin newMax rest
-										  		 where 
-										  		 	newMin = min prevMin first
-										  			newMax = max prevMax first
+                                                 where 
+                                                    newMin = min prevMin first
+                                                    newMax = max prevMax first
 
 main :: IO ()
 main = print $ minMaxFast $ sTake 1000000 $ rand 7666532
