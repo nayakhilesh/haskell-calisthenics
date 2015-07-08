@@ -111,6 +111,6 @@ instance Num Matrix where
 
 fastFib :: Int -> Integer
 fastFib 0 = 1
-fastFib n = let Matrix fib _ _ _ = f ^ n
-            in fib
+fastFib n = let Matrix fibNum _ _ _ = f ^ n
+            in fibNum
             where f = Matrix 1 1 1 0
