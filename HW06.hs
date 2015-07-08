@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -fno-warn-missing-methods #-}
 module HW06 where
 
 import Data.List
@@ -100,5 +101,16 @@ main = print $ minMaxFast $ sTake 1000000 $ rand 7666532
 
 -- Exercise 10 ----------------------------------------
 
+data Matrix = Matrix Integer Integer Integer Integer
+
+instance Show Matrix where
+    show (Matrix a b c d) = "[" ++ show a ++ ", " ++ show b ++ "]" ++ "\n[" ++ show c ++ ", " ++ show d ++ "]"
+
+instance Num Matrix where
+    (Matrix a b c d) * (Matrix p q r s) = Matrix (a * p + b * r) (a * q + b * s) (c * p + d * r) (c * q + d * s)
+
 fastFib :: Int -> Integer
-fastFib = undefined
+fastFib 0 = 1
+fastFib n = let Matrix fib _ _ _ = f ^ n
+            in fib
+            where f = Matrix 1 1 1 0
