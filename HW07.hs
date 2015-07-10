@@ -47,15 +47,28 @@ randomElt vector = case V.length vector of
 -- Exercise 4 -----------------------------------------
 
 randomVec :: Random a => Int -> Rnd (Vector a)
-randomVec = undefined
+randomVec len = V.replicateM len getRandom
 
 randomVecR :: Random a => Int -> (a, a) -> Rnd (Vector a)
-randomVecR = undefined
+randomVecR len bounds = V.replicateM len (getRandomR bounds) 
 
 -- Exercise 5 -----------------------------------------
 
 shuffle :: Vector a -> Rnd (Vector a)
-shuffle = undefined
+shuffle vector = if (V.null vector) then return V.empty
+                 else shuffleHelper ((V.length vector) - 1) (return vector)
+
+shuffleHelper :: Int -> Rnd (Vector a) -> Rnd (Vector a)
+shuffleHelper index randVector
+                | index == 0 = randVector
+                | otherwise = shuffleHelper (index - 1) swappedVector
+                where swappedVector = swapRndV index (getRandomR (0, index)) randVector
+
+swapRndV :: Int -> Rnd Int -> Rnd (Vector a) -> Rnd (Vector a)
+swapRndV i randomIndex randVector = do
+                                    vector <- randVector
+                                    j <- randomIndex
+                                    return (vector // [(i, vector ! j), (j, vector ! i)])
 
 -- Exercise 6 -----------------------------------------
 
