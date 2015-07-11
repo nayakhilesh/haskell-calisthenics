@@ -105,7 +105,16 @@ qsortR vector = if V.null vector then return V.empty
 
 -- Selection
 select :: Ord a => Int -> Vector a -> Rnd (Maybe a)
-select = undefined
+select i vector
+          | i < 0 = return Nothing
+          | i >= V.length vector = return Nothing
+          | otherwise = do
+                        randomIndex <- getRandomR (0, (V.length vector) - 1)
+                        let (left, pivot, right) = partitionAt vector randomIndex
+                        let leftLength = V.length left
+                        if i < leftLength then select i left
+                        else if i == leftLength then return $ Just pivot
+                        else select (i  - leftLength - 1) right
 
 -- Exercise 10 ----------------------------------------
 
