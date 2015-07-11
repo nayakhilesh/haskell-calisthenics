@@ -73,7 +73,9 @@ swapRndV i randomIndex randVector = do
 -- Exercise 6 -----------------------------------------
 
 partitionAt :: Ord a => Vector a -> Int -> (Vector a, a, Vector a)
-partitionAt = undefined
+partitionAt vector pivotIndex = let pivot = vector ! pivotIndex
+                                    numPivots = V.length $ V.filter (== pivot) vector
+                                in ((V.filter (< pivot) vector), pivot, (V.replicate (numPivots - 1) pivot) V.++ (V.filter (> pivot) vector))
 
 -- Exercise 7 -----------------------------------------
 
@@ -84,7 +86,9 @@ quicksort (x:xs) = quicksort [ y | y <- xs, y < x ]
                    <> (x : quicksort [ y | y <- xs, y >= x ])
 
 qsort :: Ord a => Vector a -> Vector a
-qsort = undefined
+qsort vector = if V.null vector then V.empty
+               else (qsort left) V.++ (pivot `V.cons` (qsort right))
+                where (left, pivot, right) = partitionAt vector 0
 
 -- Exercise 8 -----------------------------------------
 
