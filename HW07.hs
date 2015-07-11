@@ -93,7 +93,13 @@ qsort vector = if V.null vector then V.empty
 -- Exercise 8 -----------------------------------------
 
 qsortR :: Ord a => Vector a -> Rnd (Vector a)
-qsortR = undefined
+qsortR vector = if V.null vector then return V.empty
+                else do 
+                      randomIndex <- getRandomR (0, (V.length vector) - 1)
+                      let (left, pivot, right) = partitionAt vector randomIndex
+                      sortedLeft <- qsortR left 
+                      sortedRight <- qsortR right
+                      return (sortedLeft V.++ (pivot `V.cons` sortedRight))
 
 -- Exercise 9 -----------------------------------------
 
