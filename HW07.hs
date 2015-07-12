@@ -119,20 +119,28 @@ select i vector
 -- Exercise 10 ----------------------------------------
 
 allCards :: Deck
-allCards = undefined
+allCards = [ Card label suit | suit <- suits, label <- labels ]
 
 newDeck :: Rnd Deck
-newDeck =  undefined
+newDeck =  shuffle allCards
 
 -- Exercise 11 ----------------------------------------
 
 nextCard :: Deck -> Maybe (Card, Deck)
-nextCard = undefined
+nextCard deck
+          | V.null deck = Nothing
+          | otherwise = Just (V.head deck, V.tail deck)
 
 -- Exercise 12 ----------------------------------------
 
 getCards :: Int -> Deck -> Maybe ([Card], Deck)
-getCards = undefined
+getCards numCards deck
+                    | numCards <= 0 = Just ([], deck)
+                    | V.length deck < numCards = Nothing
+                    | otherwise = do
+                                    (card, deck') <- nextCard deck
+                                    (cards, remainingDeck) <- getCards (numCards - 1) deck' 
+                                    return (card:cards, remainingDeck)
 
 -- Exercise 13 ----------------------------------------
 
