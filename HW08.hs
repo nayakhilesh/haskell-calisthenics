@@ -106,7 +106,16 @@ modus_tollens_inverse not_q_imp_not_p p =
 -- Exercise 4 -----------------------------------------
 
 de_morgan :: Not (p \/ q) <-> (Not p /\ Not q)
-de_morgan = admit
+de_morgan = Conj de_morgan1 de_morgan2
+
+de_morgan1 :: Not (p \/ q) -> (Not p /\ Not q)
+de_morgan1 not_p_or_q = Conj not_p not_q
+                          where not_p = (\p -> not_p_or_q (Left p))
+                                not_q = (\q -> not_p_or_q (Right q))
+
+de_morgan2 :: (Not p /\ Not q) -> Not (p \/ q)
+de_morgan2 (Conj not_p not_q) (Left p) = absurd $ not_p p
+de_morgan2 (Conj not_p not_q) (Right q) = absurd $ not_q q
 
 -- Natural Numbers ------------------------------------
 
