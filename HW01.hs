@@ -22,7 +22,7 @@ toRevDigits n
 
 -- Double every second number in a list starting on the left.
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther list = map doubleEven $ zip list ([1..] :: [Integer])
+doubleEveryOther list = zipWith (curry doubleEven) list ([1 ..] :: [Integer])
                         where doubleEven (integer, index)
                                             | even index = integer * 2
                                             | otherwise = integer

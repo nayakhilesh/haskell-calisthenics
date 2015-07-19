@@ -108,7 +108,7 @@ run currentState statement = evalSimple currentState $ desugar statement
 -- handy function
 
 createStateWithVariable :: String -> Int -> State
-createStateWithVariable varName varValue = extend empty varName varValue
+createStateWithVariable = extend empty
 
 -- Programs -------------------------------------------
 

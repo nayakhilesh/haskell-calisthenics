@@ -55,7 +55,7 @@ randomVecR len bounds = V.replicateM len (getRandomR bounds)
 -- Exercise 5 -----------------------------------------
 
 shuffle :: Vector a -> Rnd (Vector a)
-shuffle vector = if (V.null vector) then return V.empty
+shuffle vector = if V.null vector then return V.empty
                  else shuffleHelper ((V.length vector) - 1) (return vector)
 
 shuffleHelper :: Int -> Rnd (Vector a) -> Rnd (Vector a)

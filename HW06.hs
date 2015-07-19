@@ -80,9 +80,9 @@ minMaxSlow xs = Just (minimum xs, maximum xs)
 minMax :: [Int] -> Maybe (Int, Int)
 minMax [] = Nothing
 minMax (first:rest) = 
-    case (minMax rest) of 
-                    Nothing -> Just (first, first)
-                    Just (restMin, restMax) -> Just (min first restMin, max first restMax)
+    case minMax rest of 
+            Nothing -> Just (first, first)
+            Just (restMin, restMax) -> Just (min first restMin, max first restMax)
 
 {- Total Memory in use: 203 MB -}
 minMaxFast :: [Int] -> Maybe (Int, Int)

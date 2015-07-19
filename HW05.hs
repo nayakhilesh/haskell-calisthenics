@@ -49,8 +49,8 @@ getBadTs victimsFilePath transactionsFilePath = do
                                               victimIds = extractObject maybeVictimIds victimsFilePath
                                               transactions = extractObject maybeTransactions transactionsFilePath
                                            in 
-                                              Just $ filter (\transaction -> not (tid transaction `elem` victimIds)) transactions
-                                  
+                                              Just $ filter (\transaction -> (tid transaction `notElem` victimIds)) transactions
+
 extractObject :: Maybe a -> FilePath -> a
 extractObject Nothing filePath = error ("failed to parse file " ++ filePath)
 extractObject (Just a) _ = a
@@ -58,14 +58,14 @@ extractObject (Just a) _ = a
 -- Exercise 5 -----------------------------------------
 -- TODO: write tests
 getFlow :: [Transaction] -> Map String Integer
-getFlow transactions = foldr addTransactionToMap Map.empty transactions
-                        where addTransactionToMap transaction acc =
-                                    Map.insertWith combineValues toPerson dollars $ Map.insertWith combineValues fromPerson (-dollars) acc
-                                    where
-                                      combineValues oldValue newValue = oldValue + newValue
-                                      fromPerson = from transaction
-                                      toPerson = to transaction
-                                      dollars = amount transaction
+getFlow = foldr addTransactionToMap Map.empty
+          where addTransactionToMap transaction acc =
+                  Map.insertWith combineValues toPerson dollars $ Map.insertWith combineValues fromPerson (-dollars) acc
+                  where
+                    combineValues oldValue newValue = oldValue + newValue
+                    fromPerson = from transaction
+                    toPerson = to transaction
+                    dollars = amount transaction
 
 -- Exercise 6 -----------------------------------------
 -- TODO: write tests

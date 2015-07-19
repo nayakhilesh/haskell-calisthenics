@@ -30,14 +30,13 @@ instance (Num a, Eq a, Show a) => Show (Poly a) where
 show' :: (Num a, Eq a, Show a) => [a] -> Int -> String 
 show' [] _ = ""
 show' [a] expo = coefficientAndExpoToString a expo
-show' (a:as) expo = if prefix /= "" && suffix /= ""
-                    then prefix ++ " + " ++ suffix
-                    else if prefix /= ""
-                          then prefix
-                          else suffix
-                    where 
-                      prefix = show' as (expo + 1)
-                      suffix = coefficientAndExpoToString a expo
+show' (a:as) expo    
+    | prefix /= "" && suffix /= "" = prefix ++ " + " ++ suffix
+    | prefix /= "" = prefix
+    | otherwise = suffix
+    where 
+      prefix = show' as (expo + 1)
+      suffix = coefficientAndExpoToString a expo
 
 coefficientAndExpoToString :: (Num a, Eq a, Show a) => a -> Int -> String
 coefficientAndExpoToString coefficient expo

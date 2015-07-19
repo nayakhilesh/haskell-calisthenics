@@ -41,7 +41,7 @@ countColors code = map countColor colors
 
 -- Count number of matches between the actual code and the guess
 matches :: Code -> Code -> Int
-matches actual guess = sum $ map (uncurry min) $ zip (countColors actual) (countColors guess)
+matches actual guess = sum $ zipWith min (countColors actual) (countColors guess)
 
 -- Exercise 3 -----------------------------------------
 
