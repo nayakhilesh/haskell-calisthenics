@@ -227,4 +227,6 @@ succ_sum (Succ n) m = case succ_sum n m of
                         Refl -> Refl
 
 double_even :: Forall n -> Even (n + n)
-double_even = admit
+double_even Zero = E_Zero
+double_even (Succ n) = case succ_sum n n of
+                        Refl -> E_Rec $ double_even n
